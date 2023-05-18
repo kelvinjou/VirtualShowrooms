@@ -148,13 +148,26 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
         
     }
     
-     func export(asset: MDLAsset) throws -> URL {
-        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let url = directory.appendingPathComponent("scanned.obj")
+    func export(asset: MDLAsset) throws -> URL {
+        guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            throw NSError(domain: "com.original.VirtualShowrooms", code: 153)
+        }
         
-        try asset.export(to: url)
+        let folderName = "OBJ_FILES" // Replace with the desired folder name
+        let folderURL = directory.appendingPathComponent(folderName)
+        
+        // Create the folder if it doesn't exist
+        try? FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+        
+        let url = folderURL.appendingPathComponent("scanned.obj")
+        
+        do {
+            try asset.export(to: url)
+            return url
+        } catch {
+            print("Error saving .obj file \(error)")
+        }
         
         return url
     }
-    
 }
