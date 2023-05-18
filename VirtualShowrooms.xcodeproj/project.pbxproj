@@ -11,6 +11,9 @@
 		BEE474342A15C04D003C2653 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE474332A15C04D003C2653 /* ContentView.swift */; };
 		BEE474362A15C04E003C2653 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE474352A15C04E003C2653 /* Assets.xcassets */; };
 		BEE474392A15C04E003C2653 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE474382A15C04E003C2653 /* Preview Assets.xcassets */; };
+		BEE474402A15C123003C2653 /* ARWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE4743F2A15C123003C2653 /* ARWrapper.swift */; };
+		BEE474422A15C1BC003C2653 /* Mesh+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE474412A15C1BC003C2653 /* Mesh+Ext.swift */; };
+		BEE474452A16027A003C2653 /* scanned.obj in Resources */ = {isa = PBXBuildFile; fileRef = BEE474442A16027A003C2653 /* scanned.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,10 @@
 		BEE474332A15C04D003C2653 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BEE474352A15C04E003C2653 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BEE474382A15C04E003C2653 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		BEE4743F2A15C123003C2653 /* ARWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARWrapper.swift; sourceTree = "<group>"; };
+		BEE474412A15C1BC003C2653 /* Mesh+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mesh+Ext.swift"; sourceTree = "<group>"; };
+		BEE474432A15D090003C2653 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BEE474442A16027A003C2653 /* scanned.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scanned.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,9 +58,13 @@
 		BEE474302A15C04D003C2653 /* VirtualShowrooms */ = {
 			isa = PBXGroup;
 			children = (
+				BEE474432A15D090003C2653 /* Info.plist */,
 				BEE474312A15C04D003C2653 /* VirtualShowroomsApp.swift */,
 				BEE474332A15C04D003C2653 /* ContentView.swift */,
+				BEE4743F2A15C123003C2653 /* ARWrapper.swift */,
+				BEE474412A15C1BC003C2653 /* Mesh+Ext.swift */,
 				BEE474352A15C04E003C2653 /* Assets.xcassets */,
+				BEE474442A16027A003C2653 /* scanned.obj */,
 				BEE474372A15C04E003C2653 /* Preview Content */,
 			);
 			path = VirtualShowrooms;
@@ -126,6 +137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEE474392A15C04E003C2653 /* Preview Assets.xcassets in Resources */,
+				BEE474452A16027A003C2653 /* scanned.obj in Resources */,
 				BEE474362A15C04E003C2653 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,7 +149,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEE474402A15C123003C2653 /* ARWrapper.swift in Sources */,
 				BEE474342A15C04D003C2653 /* ContentView.swift in Sources */,
+				BEE474422A15C1BC003C2653 /* Mesh+Ext.swift in Sources */,
 				BEE474322A15C04D003C2653 /* VirtualShowroomsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,6 +284,8 @@
 				DEVELOPMENT_TEAM = 347C6X6X6T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VirtualShowrooms/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -299,6 +315,8 @@
 				DEVELOPMENT_TEAM = 347C6X6X6T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VirtualShowrooms/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -8,9 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var viewModel = ExportViewModel()
+    @State var wantsExport = false
+    @State private var exportedURL: URL?
     var body: some View {
-        Text("Hello, world!")
+        VStack {
+            ARViewWrapper(wantsExport: $wantsExport, exportedURL: $exportedURL)
+                .ignoresSafeArea()
+//                .frame(height: viewModel.imageViewHeight)
+
+            Button("Export") {
+//                viewModel.exportButtonTapped()
+                wantsExport = true
+                
+            }
             .padding()
+        }
+        .sheet(item: $exportedURL) { url in
+            ActivityView(activityItems: [url])
+        }
+        .onAppear {
+            viewModel.startARSession()
+        }
+        .onDisappear {
+            viewModel.stopARSession()
+        }
     }
 }
 
