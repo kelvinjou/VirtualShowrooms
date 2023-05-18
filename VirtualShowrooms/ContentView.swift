@@ -12,27 +12,20 @@ struct ContentView: View {
     @State var wantsExport = false
     @State private var exportedURL: URL?
     var body: some View {
-        VStack {
-            ARViewWrapper(wantsExport: $wantsExport, exportedURL: $exportedURL)
-                .ignoresSafeArea()
-//                .frame(height: viewModel.imageViewHeight)
-
-            Button("Export") {
-//                viewModel.exportButtonTapped()
-                wantsExport = true
+        HStack {
+            FetchModel()
+            VStack {
+                ARViewWrapper(wantsExport: $wantsExport, exportedURL: $exportedURL)
+                    .ignoresSafeArea()
                 
+                Button("Export") {
+                    wantsExport = true
+                    
+                }
+                .padding()
             }
-            .padding()
         }
-        .sheet(item: $exportedURL) { url in
-            ActivityView(activityItems: [url])
-        }
-        .onAppear {
-            viewModel.startARSession()
-        }
-        .onDisappear {
-            viewModel.stopARSession()
-        }
+        
     }
 }
 

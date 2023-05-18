@@ -33,7 +33,6 @@ struct ARViewWrapper: UIViewRepresentable {
                 do {
                     let url = try ExportViewModel().export(asset: asset)
                     exportedURL = url
-                    print(exportedURL)
                     
                 } catch {
                     print("Export error")
@@ -63,19 +62,6 @@ struct ARViewWrapper: UIViewRepresentable {
     }
 }
 
-
-
-struct ActivityView: UIViewControllerRepresentable {
-    let activityItems: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        return activityViewController
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
 class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
     @Published var imageViewHeight: CGFloat = 0
     @Published var exportedURL: URL?
@@ -84,35 +70,14 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
     private var camera: ARCamera?
 
     func startARSession() {
-//        arView = ARView(frame: .zero)
         arView?.session.delegate = self
-//        setARViewOptions(arView!)
-//        let configuration = buildConfigure()
-//        arView?.session.run(configuration)
     }
 
     func stopARSession() {
         arView?.session.pause()
         arView = nil
     }
-
-//    private func setARViewOptions(_ arView: ARView) {
-//        arView.debugOptions.insert(.showSceneUnderstanding)
-//    }
-//
-//    private func buildConfigure() -> ARWorldTrackingConfiguration {
-//        let configuration = ARWorldTrackingConfiguration()
-//
-//        configuration.environmentTexturing = .automatic
-//        configuration.sceneReconstruction = .mesh
-//        if type(of: configuration).supportsFrameSemantics(.sceneDepth) {
-//            configuration.frameSemantics = .sceneDepth
-//        }
-//
-//        return configuration
-//    }
     
-    // TODO: for app, ur gonna want to save it to FileManager
     func exportButtonTapped() {
             guard let camera = camera else { return }
 
@@ -144,10 +109,6 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
         UIApplication.shared.windows.first?.rootViewController?.present(vc, animated: true, completion: nil)
     }
     
-    func shareRequirement() {
-        
-    }
-    
     func export(asset: MDLAsset) throws -> URL {
         guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             throw NSError(domain: "com.original.VirtualShowrooms", code: 153)
@@ -159,10 +120,12 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
         // Create the folder if it doesn't exist
         try? FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
         
-        let url = folderURL.appendingPathComponent("scanned.obj")
+        let url = folderURL.appendingPathComponent("\(UUID().uuidString).obj")
         
         do {
             try asset.export(to: url)
+            print("Object saved successfully at: ", url)
+
             return url
         } catch {
             print("Error saving .obj file \(error)")
