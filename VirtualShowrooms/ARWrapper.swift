@@ -10,12 +10,12 @@ import RealityKit
 import ARKit
 
 struct ARViewWrapper: UIViewRepresentable {
-    
-    @Binding var wantsExport: Bool
+    @Binding var submittedExportRequest: Bool
     @Binding var exportedURL: URL?
+    var submittedName: String
+    
     let arView = ARView(frame: .zero)
     func makeUIView(context: Context) -> ARView {
-        
         return arView
     }
     
@@ -24,14 +24,13 @@ struct ARViewWrapper: UIViewRepresentable {
         let configuration = buildConfigure()
         arView.session.run(configuration)
         
-        if wantsExport {
-            var exportedURL: URL?
+        if submittedExportRequest {
             guard let camera = arView.session.currentFrame?.camera else {return}
             
             if let meshAnchors = arView.session.currentFrame?.anchors.compactMap({ $0 as? ARMeshAnchor }),
                let asset = ExportViewModel().convertToAsset(meshAnchors: meshAnchors, camera: camera) {
                 do {
-                    let url = try ExportViewModel().export(asset: asset)
+                    let url = try ExportViewModel().export(asset: asset, fileName: submittedName)
                     exportedURL = url
                     
                 } catch {
@@ -65,33 +64,20 @@ struct ARViewWrapper: UIViewRepresentable {
 class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
     @Published var imageViewHeight: CGFloat = 0
     @Published var exportedURL: URL?
-
+    
     private var arView: ARView?
     private var camera: ARCamera?
-
+    
     func startARSession() {
         arView?.session.delegate = self
     }
-
+    
     func stopARSession() {
         arView?.session.pause()
         arView = nil
     }
     
-    func exportButtonTapped() {
-            guard let camera = camera else { return }
-
-            if let meshAnchors = arView?.session.currentFrame?.anchors.compactMap({ $0 as? ARMeshAnchor }),
-               let asset = convertToAsset(meshAnchors: meshAnchors, camera: camera) {
-                do {
-                    let url = try export(asset: asset)
-                    exportedURL = url
-                } catch {
-                    print("Export error")
-                }
-            }
-        }
-     func convertToAsset(meshAnchors: [ARMeshAnchor], camera: ARCamera) -> MDLAsset? {
+    func convertToAsset(meshAnchors: [ARMeshAnchor], camera: ARCamera) -> MDLAsset? {
         guard let device = MTLCreateSystemDefaultDevice() else { return nil }
         
         let asset = MDLAsset()
@@ -104,12 +90,7 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
         return asset
     }
     
-    func share(url: URL) {
-        let vc = UIActivityViewController(activityItems: [url],applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(vc, animated: true, completion: nil)
-    }
-    
-    func export(asset: MDLAsset) throws -> URL {
+    func export(asset: MDLAsset, fileName: String) throws -> URL {
         guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             throw NSError(domain: "com.original.VirtualShowrooms", code: 153)
         }
@@ -120,12 +101,13 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
         // Create the folder if it doesn't exist
         try? FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
         
-        let url = folderURL.appendingPathComponent("\(UUID().uuidString).obj")
+//        if fileName is "", use default UUID
+        let url = folderURL.appendingPathComponent("\( fileName.isEmpty ? UUID().uuidString : fileName ).obj")
         
         do {
             try asset.export(to: url)
             print("Object saved successfully at: ", url)
-
+            
             return url
         } catch {
             print("Error saving .obj file \(error)")
