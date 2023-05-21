@@ -24,20 +24,22 @@ struct ContentView: View {
                     .ignoresSafeArea()
                 
                 Button("Export") {
-                    wantsExport.toggle()
-                    
-                }.alert("Enter file name", isPresented: $wantsExport) {
-                    TextField("myScan", text: $inputName)
-                    Button(action: {
-                        submittedName = inputName
-                        submittedExportRequest.toggle()
-                    }) {
-                        Text("Save")
-                    }
-                    Button("Cancel", role: .cancel) { }
-                } message: {
-                    Text("A default file name will be given if you leave the text field blank.")
+//                    wantsExport.toggle()
+                    submittedExportRequest.toggle()
+
                 }
+//                .alert("Enter file name", isPresented: $wantsExport) {
+//                    TextField("myScan", text: $inputName)
+//                    Button(action: {
+//                        submittedName = inputName
+//                        submittedExportRequest.toggle()
+//                    }) {
+//                        Text("Save")
+//                    }
+//                    Button("Cancel", role: .cancel) { }
+//                } message: {
+//                    Text("A default file name will be given if you leave the text field blank.")
+//                }
                 .padding()
             }
         }

@@ -52,10 +52,14 @@ struct ARViewWrapper: UIViewRepresentable {
         let configuration = ARWorldTrackingConfiguration()
         
         configuration.environmentTexturing = .automatic
-        configuration.sceneReconstruction = .mesh
+        
+        arView.automaticallyConfigureSession = false
+        configuration.sceneReconstruction = .meshWithClassification
+    
         if type(of: configuration).supportsFrameSemantics(.sceneDepth) {
             configuration.frameSemantics = .sceneDepth
         }
+        
         
         return configuration
     }
@@ -79,16 +83,17 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
     
     func convertToAsset(meshAnchors: [ARMeshAnchor], camera: ARCamera) -> MDLAsset? {
         guard let device = MTLCreateSystemDefaultDevice() else { return nil }
-        
+
         let asset = MDLAsset()
-        
+
         for anchor in meshAnchors {
             let mdlMesh = anchor.geometry.toMDLMesh(device: device, camera: camera, modelMatrix: anchor.transform)
             asset.add(mdlMesh)
         }
-        
+
         return asset
     }
+    
     
     func export(asset: MDLAsset, fileName: String) throws -> URL {
         guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
