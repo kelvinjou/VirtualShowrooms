@@ -119,7 +119,7 @@ struct SceneViewWrapper: UIViewRepresentable {
         
         scnView.allowsCameraControl = true
         scnView.autoenablesDefaultLighting = true
-        scnView.antialiasingMode = .multisampling2X
+        scnView.antialiasingMode = .multisampling4X
         
         let lightNode = SCNNode()
         lightNode.light = SCNLight()

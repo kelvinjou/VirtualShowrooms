@@ -11,8 +11,8 @@ import ARKit
 
 struct ARViewWrapper: UIViewRepresentable {
     @Binding var submittedExportRequest: Bool
-    @Binding var exportedURL: URL?
-    var submittedName: String
+//    @Binding var exportedURL: URL?
+    @Binding var submittedName: String
     
     let arView = ARView(frame: .zero)
     func makeUIView(context: Context) -> ARView {
@@ -20,18 +20,19 @@ struct ARViewWrapper: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: ARView, context: Context) {
+        let vm = ExportViewModel()
         setARViewOptions(arView)
         let configuration = buildConfigure()
         arView.session.run(configuration)
         
         if submittedExportRequest {
-            guard let camera = arView.session.currentFrame?.camera else {return}
+            guard let camera = arView.session.currentFrame?.camera else { return }
             
             if let meshAnchors = arView.session.currentFrame?.anchors.compactMap({ $0 as? ARMeshAnchor }),
-               let asset = ExportViewModel().convertToAsset(meshAnchors: meshAnchors, camera: camera) {
+               let asset = vm.convertToAsset(meshAnchors: meshAnchors, camera: camera) {
                 do {
-                    let url = try ExportViewModel().export(asset: asset, fileName: submittedName)
-                    exportedURL = url
+
+                    try ExportViewModel().export(asset: asset, fileName: submittedName)
                     
                 } catch {
                     print("Export error")
@@ -68,19 +69,7 @@ struct ARViewWrapper: UIViewRepresentable {
 class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
     @Published var imageViewHeight: CGFloat = 0
     @Published var exportedURL: URL?
-    
-    private var arView: ARView?
-    private var camera: ARCamera?
-    
-    func startARSession() {
-        arView?.session.delegate = self
-    }
-    
-    func stopARSession() {
-        arView?.session.pause()
-        arView = nil
-    }
-    
+        
     func convertToAsset(meshAnchors: [ARMeshAnchor], camera: ARCamera) -> MDLAsset? {
         guard let device = MTLCreateSystemDefaultDevice() else { return nil }
 
@@ -94,7 +83,7 @@ class ExportViewModel: NSObject, ObservableObject, ARSessionDelegate {
         return asset
     }
     
-    
+    // What is an mdl asset? -> An indexed container for 3D objects and associated information, such as transform hierarchies, meshes, cameras, and lights
     func export(asset: MDLAsset, fileName: String) throws -> URL {
         guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             throw NSError(domain: "com.original.VirtualShowrooms", code: 153)
