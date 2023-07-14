@@ -8,18 +8,22 @@
 import SwiftUI
 import SceneKit
 
+class CurrentlyDisplaying: ObservableObject {
+    @Published var fileName = ""
+}
 
-struct FetchModel: View {
+struct FetchModelView: View {
+    @StateObject private var currentlyDisplaying = CurrentlyDisplaying()
     @State private var fileNames: [String] = []
-    @State var fileName = ""
-    @State var fullScreen = false
+    @State private var fullScreen = false
+    
     var body: some View {
         VStack {
-            List(fileNames, id: \.self) { fileName in
+            List(self.fileNames, id: \.self) { fileName in
                 Button(action: {
-                    print(fileName)
-                    self.fileName = fileName
-                    fullScreen.toggle()
+                    self.currentlyDisplaying.fileName = fileName
+                    self.fullScreen.toggle()
+                    
                 }) {
                     HStack {
                         Text(fileName)
@@ -41,23 +45,20 @@ struct FetchModel: View {
             .refreshable {
                 fetchFiles()
             }
-            
             .fullScreenCover(isPresented: $fullScreen) {
                 ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
-                    if !fileName.isEmpty {
-                        SceneViewWrapper(scene: displayFile(fileName: self.fileName)).id(fileName)
+                    if !self.currentlyDisplaying.fileName.isEmpty {
+                        
+                        SceneViewWrapper(scene: displayFile(fileName: currentlyDisplaying.fileName))
                     }
                     Button(action: {
-                        fullScreen = false
+                        self.fullScreen = false
                     }) {
                         Text("Back").padding()
                     }
                 }
-                
             }
-            
-        }
-        .onAppear {
+        }.onAppear {
             fetchFiles()
         }
     }
@@ -66,9 +67,8 @@ struct FetchModel: View {
             return
         }
         
-        let folderName = "OBJ_FILES" // Replace with the folder name you want to access
+        let folderName = "OBJ_FILES"
         let folderURL = documentsDirectory.appendingPathComponent(folderName)
-        
         do {
             let fileURLs = try FileManager.default.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil)
             let filteredURLs = fileURLs.filter { (url) -> Bool in
@@ -80,7 +80,6 @@ struct FetchModel: View {
             print("Error fetching files: \(error)")
         }
     }
-    
     func displayFile(fileName: String) -> SCNScene {
         guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             fatalError("Failed to access documents directory.")
@@ -89,11 +88,9 @@ struct FetchModel: View {
         let folderName = "OBJ_FILES"
         let folderURL = directory.appendingPathComponent(folderName)
         let fileURL = folderURL.appendingPathComponent(fileName)
-        
         let sceneView = try? SCNScene(url: fileURL)
         return sceneView ?? SCNScene()
     }
-    
     func removeFile(fileName: String) {
         guard let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             fatalError("Failed to access documents directory.")
@@ -102,35 +99,40 @@ struct FetchModel: View {
         let folderName = "OBJ_FILES"
         let folderURL = directory.appendingPathComponent(folderName)
         let fileURL = folderURL.appendingPathComponent(fileName)
-        
         do {
             try FileManager.default.removeItem(at: fileURL)
             print("File removed successfully: \(fileURL)")
         } catch {
             print("Error removing file: \(error)")
         }
+        
     }
 }
 
+struct FetchModelView_Previews: PreviewProvider {
+    static var previews: some View {
+        FetchModelView()
+    }
+}
+
+
 struct SceneViewWrapper: UIViewRepresentable {
     let scene: SCNScene?
-    func makeUIView(context: Context) -> SCNView {
+    func makeUIView(context: Context) -> some UIView {
         let scnView = SCNView()
-        
         scnView.allowsCameraControl = true
         scnView.autoenablesDefaultLighting = true
         scnView.antialiasingMode = .multisampling4X
         
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
-        lightNode.light?.type = .ambient // Set the light type (e.g., .omni, .directional, .spot, .ambient)
-        lightNode.light?.color = UIColor.white // Set the light color
-        // lightNode.position = SCNVector3(x: 0, y: 3, z: 0) // Set the position of the light node
+        lightNode.light?.type = .ambient
+        lightNode.light?.color = UIColor.white
         scene?.rootNode.addChildNode(lightNode)
         
         scnView.scene = scene
         scnView.backgroundColor = .clear
         return scnView
     }
-    func updateUIView(_ uiView: SCNView, context: Context) {    }
+    func updateUIView(_ uiView: UIViewType, context: Context) { }
 }

@@ -13,15 +13,15 @@ struct ContentView: View {
     @State private var submittedName = "" // confirmed that this one will be processed
     var body: some View {
         HStack {
-            FetchModel()
+            FetchModelView()
             VStack {
-                ARViewWrapper(submittedExportRequest: $submittedExportRequest, submittedName: $submittedName)
+                ARViewWrapper(submittedExportRequest: self.$submittedExportRequest, submittedName: self.$submittedName)
                     .ignoresSafeArea()
                 
                 Button("Export") {
                     alertTF(title: "Save file", message: "enter your file name", hintText: "my_file", primaryTitle: "Save", secondaryTitle: "cancel") { text in
-                        submittedName = text
-                        submittedExportRequest.toggle()
+                        self.submittedName = text
+                        self.submittedExportRequest.toggle()
                     } secondaryAction: {
                         print("Cancelled")
                     }

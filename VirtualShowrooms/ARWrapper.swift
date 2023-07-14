@@ -32,7 +32,7 @@ struct ARViewWrapper: UIViewRepresentable {
                let asset = vm.convertToAsset(meshAnchors: meshAnchors, camera: camera) {
                 do {
 
-                    try ExportViewModel().export(asset: asset, fileName: submittedName)
+                    try ExportViewModel().export(asset: asset, fileName: self.submittedName)
                     
                 } catch {
                     print("Export error")

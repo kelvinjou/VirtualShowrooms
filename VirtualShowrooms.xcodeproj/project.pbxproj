@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BE82C60B2A22FE2900C467D1 /* CamrySienna86.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BE82C60A2A22FE2900C467D1 /* CamrySienna86.mlmodel */; };
 		BEE474322A15C04D003C2653 /* VirtualShowroomsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE474312A15C04D003C2653 /* VirtualShowroomsApp.swift */; };
 		BEE474342A15C04D003C2653 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE474332A15C04D003C2653 /* ContentView.swift */; };
 		BEE474362A15C04E003C2653 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEE474352A15C04E003C2653 /* Assets.xcassets */; };
@@ -19,7 +18,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BE82C60A2A22FE2900C467D1 /* CamrySienna86.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CamrySienna86.mlmodel; sourceTree = "<group>"; };
 		BEE4742E2A15C04D003C2653 /* VirtualShowrooms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualShowrooms.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEE474312A15C04D003C2653 /* VirtualShowroomsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualShowroomsApp.swift; sourceTree = "<group>"; };
 		BEE474332A15C04D003C2653 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -70,7 +68,6 @@
 				BEE474412A15C1BC003C2653 /* Mesh+Ext.swift */,
 				BEE474352A15C04E003C2653 /* Assets.xcassets */,
 				BEE474442A16027A003C2653 /* scanned.obj */,
-				BE82C60A2A22FE2900C467D1 /* CamrySienna86.mlmodel */,
 				BEE474372A15C04E003C2653 /* Preview Content */,
 			);
 			path = VirtualShowrooms;
@@ -156,7 +153,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BEE474472A16069F003C2653 /* FetchModel.swift in Sources */,
-				BE82C60B2A22FE2900C467D1 /* CamrySienna86.mlmodel in Sources */,
 				BEE474402A15C123003C2653 /* ARWrapper.swift in Sources */,
 				BEE474342A15C04D003C2653 /* ContentView.swift in Sources */,
 				BEE474422A15C1BC003C2653 /* Mesh+Ext.swift in Sources */,
